@@ -1,3 +1,3 @@
 <template>
-    Test
+    <RouterView />
 </template>
