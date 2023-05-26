@@ -1,6 +1,8 @@
-import { createApp, h } from 'vue'
+import './bootstrap'
+import { createApp } from 'vue'
 import { createPinia } from 'pinia'
 import { NLoadingBarProvider, NMessageProvider } from 'naive-ui';
+import naive from 'naive-ui';
 import VueCookies from 'vue-cookies'
 import router from './router'
 import './style.css'
@@ -20,6 +22,7 @@ const app = createApp(
 app.use(createPinia())
 app.use(VueCookies, { expire: "7d" })
 app.use(router)
+app.use(naive)
 app.component('Navbar', Navbar)
 app.component('Sidebar', Sidebar)
 app.component('Footer', Footer)

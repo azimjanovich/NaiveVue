@@ -1,4 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router'
+import { useBreadcrumb } from '../stores/Breadcrumb'
+import { useMenu } from '../stores/menu'
 
 const router = createRouter({
     history: createWebHistory(),
@@ -6,8 +8,8 @@ const router = createRouter({
         {
             path: '/',
             beforeEnter(to, from, next) {
-                next({ name: 'login' })
-            },
+                console.log(to);
+            }
         },
         {
             path: '/login',
@@ -22,22 +24,40 @@ const router = createRouter({
             //     }
             // },
         },
-        // {
-        //     path: '/cabinet',
-        //     name: 'cabinet',
-        //     component: () => import('../auth/Auth.vue'),
-        //     children: [
-        //     ],
-        //     beforeEnter(to, from, next) {
-        //         next()
-        //         // if (is_user_logged()) {
-        //         //     next()
-        //         // } else {
-        //         //     next({ name: 'login' })
-        //         // }
-        //     },
-        // }
+        {
+            path: '/cabinet',
+            name: 'cabinet',
+            component: () => import('../auth/Auth.vue'),
+            children: [
+                {
+                    path: '/cabinet/home',
+                    name: 'cabinet.home',
+                    component: () => import('../view/Home.vue'),
+                    meta: { title: 'Home page', breadcrumbClosable: false }
+                },
+                {
+                    path: '/cabinet/users',
+                    name: 'cabinet.users',
+                    component: () => import('../view/User.vue'),
+                    meta: { title: 'Users page' }
+                }
+            ],
+            beforeEnter(to, from, next) {
+                console.log(to);
+                next({ name: 'login' })
+                // if (is_user_logged()) {
+                //     next()
+                // } else {
+                //     next({ name: 'login' })
+                // }
+            },
+        }
     ],
+})
+
+router.beforeEach((to, from) => {
+    useBreadcrumb().add(to.meta.title, to.name, to.meta.breadcrumbClosable ?? true)
+    useMenu().setDefaultValue(to.name)
 })
 
 export default router
