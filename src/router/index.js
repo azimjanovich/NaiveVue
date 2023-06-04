@@ -43,8 +43,7 @@ const router = createRouter({
                 }
             ],
             beforeEnter(to, from, next) {
-                console.log(to);
-                next({ name: 'login' })
+                next()
                 // if (is_user_logged()) {
                 //     next()
                 // } else {
@@ -56,8 +55,10 @@ const router = createRouter({
 })
 
 router.beforeEach((to, from) => {
-    useBreadcrumb().add(to.meta.title, to.name, to.meta.breadcrumbClosable ?? true)
-    useMenu().setDefaultValue(to.name)
+    if (to.name != 'login') {
+        useBreadcrumb().add(to.meta.title, to.name, to.meta.breadcrumbClosable ?? true)
+        useMenu().setDefaultValue(to.name)
+    }
 })
 
 export default router
